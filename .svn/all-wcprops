@@ -13,13 +13,13 @@ Makefile.PL
 K 25
 svn:wc:ra_dav:version-url
 V 53
-/svn/!svn/ver/32/trunk/src/Net-Canopy-BAM/Makefile.PL
+/svn/!svn/ver/70/trunk/src/Net-Canopy-BAM/Makefile.PL
 END
 Changes
 K 25
 svn:wc:ra_dav:version-url
 V 49
-/svn/!svn/ver/68/trunk/src/Net-Canopy-BAM/Changes
+/svn/!svn/ver/70/trunk/src/Net-Canopy-BAM/Changes
 END
 README
 K 25
