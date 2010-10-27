@@ -9,7 +9,7 @@ use Data::Dumper;
 
 require Exporter;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 NAME
 
@@ -112,19 +112,6 @@ sub parseQstr {
 	return \%qhash;
 }
 
-=head3 idPacket
-
-	my $packetID = $ncb->idPacket(packet => $packet);
-	
-Returns the type of BAM packet. 
-
-=cut
-
-# Return type of packet recieved
-sub idPacket {
-
-}
-
 =head3 mkAcceptPacket
 
 	my $packet = $ncb->mkAcceptPacket(
@@ -182,11 +169,78 @@ sub mkRejectPacket {
 	return $packet;
 }
 
+=head3 mkConfirmPacket 
+
+  my $packet = $ncb->mkConfirmPacket(confirmation_token);
+
+=cut
+# Assemble confirmation packet
+sub mkConfirmPacket {
+  my ($class, $token) = @_;
+
+  my $magic1 = "46000000";
+  
+  my $packet = $magic1 . $token;
+  $packet = pack('H*', $packet);
+
+  return $packet;
+}
+
 =head3 parsePacket
 
 	my $parsedPacket = $ncb->parsePacket(packet => $packet);
 
 Identify packet and parse out data. Returns packet type and data as hashref
+
+=head4 Packet types
+
+=over
+
+=item authreq
+
+Authentication request from AP
+
+=over
+
+=item type - packet type
+
+=item sm - SM MAC address
+
+=item ap - AP MAC address
+
+=item luid - SM LUID on AP
+
+=item seq - Packet sequence number
+
+=back
+
+=item authchal-1
+
+Authentication challange from AP
+
+=item authchal-2
+
+Second Authentication challange from AP
+
+=item authgrant
+
+Authentication grant
+
+=item authverify
+
+=over
+
+=item token - verification session token
+
+=back
+
+Authentication verification
+
+=item authconfirm
+
+Authentication confirmation
+
+=back
 
 =cut
 
@@ -214,15 +268,17 @@ sub parsePacket {
 	} elsif ($type eq '25') { # Auth grant
 		$pinfo{'type'} = 'authgrant';
 		
-	} elsif ($type eq '45') { # Unknown
-		$pinfo{'type'} = 'unknown-45';
+	} elsif ($type eq '45') { # Auth verify
+		$pinfo{'type'} = 'authverify';
 		
-		$pinfo{'magic1'} = substr($packet, 0, 24);
+		$pinfo{'magic1'} = substr($packet, 0, 8);
+    $pinfo{'token'} = substr($packet, 8, 16);
+    $pinfo{'magic2'} = substr($packet, 16, 8);
 		$pinfo{'sm'} = substr($packet, 24, 12);
-		$pinfo{'magic2'} = substr($packet, 36, 214);
+		$pinfo{'magic3'} = substr($packet, 36, 214);
 		
-	} elsif ($type eq '46') { # Unknown
-		$pinfo{'type'} = 'unknown-46';
+	} elsif ($type eq '46') { # Auth confirm
+		$pinfo{'type'} = 'authconfirm';
 		
 	} else {
 		print "Unknown packet: $packet\n";	
@@ -246,7 +302,7 @@ Jonathan Auer, E<lt>jda@tapodi.netE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-  Copyright (C) 2008 by Jonathan Auer
+  Copyright (C) 2010 by Jonathan Auer
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.

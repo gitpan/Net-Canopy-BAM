@@ -1,15 +1,15 @@
 10
 
 dir
-67
+92
 https://jungleauth.googlecode.com/svn/trunk/src/Net-Canopy-BAM/lib/Net/Canopy
 https://jungleauth.googlecode.com/svn
 
 
 
-2008-08-26T06:10:31.872006Z
-48
-jda@tapodi.net
+2010-10-22T04:11:21.412760Z
+90
+jonauer
 
 
 
@@ -28,19 +28,15 @@ jda@tapodi.net
 
 BAM.pm
 file
-70
-
-
-
-2010-05-04T04:34:15.000000Z
-3e4357aafe189bd5dea89fcec22650ef
-2010-05-04T04:35:46.083169Z
-70
-jda@tapodi.net
 
 
 
 
+2010-10-27T17:42:25.000000Z
+e9f49e90c2bb36a788e8924f2c046356
+2010-10-22T04:11:21.412760Z
+90
+jonauer
 
 
 
@@ -58,7 +54,11 @@ jda@tapodi.net
 
 
 
-5660
+
+
+
+
+6430
 
 work.pl
 file
